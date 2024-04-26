@@ -193,19 +193,32 @@ def compute_direction_vector(prototypes):
 
 def project_text_on_direction(text_embedding, direction_vector):
     # Normalize the direction vector
-    norm_direction_vector = direction_vector / torch.norm(direction_vector)
-    # Project the text embedding onto the direction vector
-    projection = torch.dot(text_embedding.flatten(), norm_direction_vector)
+    norm_direction_vector = direction_vector.flatten() / torch.norm(direction_vector)
+    # Ensure text_embedding is also flattened
+    text_embedding_flat = text_embedding.flatten()
+
+    # Check dimensions
+    print(f"Text embedding dimensions: {text_embedding_flat.shape}")
+    print(f"Normalized direction vector dimensions: {norm_direction_vector.shape}")
+
+    # Calculate projection
+    projection = torch.dot(text_embedding_flat, norm_direction_vector)
     return projection
+
 
 def rank_texts_by_optimism(texts, proto_net, prototypes):
     direction_vector = compute_direction_vector(prototypes)
     projections = []
     for text in texts:
         text_embedding = get_contextual_embedding(text)
-        projection = project_text_on_direction(text_embedding, direction_vector)
-        projections.append(projection.item())
+        try:
+            projection = project_text_on_direction(text_embedding, direction_vector)
+            projections.append(projection.item())
+        except RuntimeError as e:
+            print(f"Error projecting text '{text}': {str(e)}")
+            projections.append(None)  # Use None or a default value for failed projections
     return projections
+
 
 # Initialize and train the model as before
 for episode in train_episode_data:
