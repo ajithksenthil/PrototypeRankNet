@@ -147,11 +147,11 @@ avg_loss, accuracy = validate_optimism_proto_net(proto_net, validation_data, pro
 print(f'Validation Loss: {avg_loss:.4f}, Accuracy: {accuracy:.2f}%')
 
 
-def rank_texts_by_optimism(texts, proto_net, prototypes):
-    embeddings = torch.stack([get_contextual_embedding(text) for text in texts])
-    dists = proto_net(embeddings, torch.stack(list(prototypes.values())))
-    rankings = torch.argmin(dists, dim=1)
-    return rankings
+# def rank_texts_by_optimism(texts, proto_net, prototypes):
+#     embeddings = torch.stack([get_contextual_embedding(text) for text in texts])
+#     dists = proto_net(embeddings, torch.stack(list(prototypes.values())))
+#     rankings = torch.argmin(dists, dim=1)
+#     return rankings
 
 def rankings_to_scores(rankings, num_prototypes):
     # Assuming rankings are 0-indexed and should be mapped to a scale of 1 to num_prototypes
@@ -159,16 +159,7 @@ def rankings_to_scores(rankings, num_prototypes):
     return scores
 
 
-new_texts = ["The future looks bright with many possibilities.", "Risks are high and outlook is poor."]
-rankings = rank_texts_by_optimism(new_texts, proto_net, prototypes)
-print("Rankings:", rankings)
-
-rankings = rank_texts_by_optimism(new_texts, proto_net, prototypes)
-scores = rankings_to_scores(rankings, len(prototypes))
-print("Optimism Scores:", scores)
-
-normalized_scores = scores.float() / len(prototypes)  # Normalize to a 0-1 scale
-print("Normalized Optimism Scores:", normalized_scores)
+new_texts = ["The future looks bright with many possibilities.", "Risks are high and outlook is poor.", "Everything is falling apart", "I can't see how things could be any better", "We are looking at a bright future."]
 
 def softmax_scores(distances):
     probabilities = F.softmax(-distances, dim=1)  # Apply softmax to negative distances
@@ -176,11 +167,11 @@ def softmax_scores(distances):
     weighted_scores = torch.sum(probabilities * scores.float(), dim=1)
     return weighted_scores
 
-# Example of using this in validation
-embeddings = torch.stack([get_contextual_embedding(text) for text in new_texts])
-dists = proto_net(embeddings, torch.stack(list(prototypes.values())))
-softmax_scores = softmax_scores(dists)
-print("Softmax-based Optimism Scores:", softmax_scores)
+# # Example of using this in validation
+# embeddings = torch.stack([get_contextual_embedding(text) for text in new_texts])
+# dists = proto_net(embeddings, torch.stack(list(prototypes.values())))
+# softmax_scores = softmax_scores(dists)
+# print("Softmax-based Optimism Scores:", softmax_scores)
 
 
 # direction vector implementation
