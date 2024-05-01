@@ -216,6 +216,8 @@ for episode in train_episode_data:
     loss = train_optimism_proto_net(proto_net, optimizer, {episode: train_episode_data[episode]}, prototypes)
     print(f'Training Loss: {loss:.4f}')
 
+    
+print("prototypes: ", prototypes)
 # Compute the direction vector from the learned prototypes
 direction_vector = compute_direction_vector(prototypes)
 
