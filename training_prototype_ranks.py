@@ -159,7 +159,7 @@ def rankings_to_scores(rankings, num_prototypes):
     return scores
 
 
-new_texts = ["The future looks bright with many possibilities.", "Risks are high and outlook is poor.", "Everything is falling apart", "I can't see how things could be any better", "We are looking at a bright future."]
+new_texts = ["The future looks bright with many possibilities.", "Risks are high and outlook is poor.", "Everything is falling apart", "I can't see how things could be any better", "We are looking at a bright future.", "Everything is awesome", "Everything is cool in this business", "Business is booming.", "Things are not looking great", "We are going bankrupt."]
 
 def softmax_scores(distances):
     probabilities = F.softmax(-distances, dim=1)  # Apply softmax to negative distances
@@ -217,16 +217,16 @@ for episode in train_episode_data:
     print(f'Training Loss: {loss:.4f}')
 
     
-print("prototypes: ", prototypes)
+# print("prototypes: ", prototypes)
 # Compute the direction vector from the learned prototypes
 direction_vector = compute_direction_vector(prototypes)
 
 # Rank new texts by their optimism based on the direction vector
 new_texts_projections = rank_texts_by_optimism(new_texts, proto_net, prototypes)
 
-# Print out the results
+# Print out the results, NOTE reversed the projections to make negative less optimistic
 print("Text Optimism Projections:")
 for text, projection in zip(new_texts, new_texts_projections):
-    print(f"{text}: {projection:.2f}")
+    print(f"{text}: {-1 * projection:.2f}")
 
 # Optionally, use softmax scores or normalized scores as before
