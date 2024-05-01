@@ -21,6 +21,8 @@ def embed_text(text):
 text_high = "The company has had a tremendously successful year, and future prospects look excellent."
 text_low = "The company has faced significant challenges and uncertainties, with no clear resolution in sight."
 
+# TODO use aggregate direction vector methods from other files here
+
 # Compute embeddings
 embed_high = embed_text(text_high)
 embed_low = embed_text(text_low)
