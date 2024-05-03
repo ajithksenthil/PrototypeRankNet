@@ -74,12 +74,7 @@ def aggregate_direction_vectors(direction_vectors):
     aggregated_vector = aggregated_vector / len(direction_vectors)
     return aggregated_vector
 
-# Project text onto the aggregated direction vector
-# def project_text_on_aggregated_vector(text_embedding, aggregated_vector):
-#     text_embedding_flat = text_embedding.flatten()
-#     aggregated_vector_flat = aggregated_vector.flatten()
-#     projection = torch.dot(text_embedding_flat, aggregated_vector_flat)
-#     return projection
+
 def project_text_on_aggregated_vector(text_embedding, aggregated_vector, transform_layers):
     # Transform the text embedding to match the prototype dimensions
     transformed_text_embedding = transform_layers(text_embedding.unsqueeze(0)).squeeze(0)
